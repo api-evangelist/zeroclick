@@ -1,0 +1,27 @@
+generated: '2026-07-21'
+method: searched
+source: npm registry (registry.npmjs.org/@zeroclickai/sellers) + https://zeroclick.ai/docs
+packages:
+- name: '@zeroclickai/sellers'
+  ecosystem: npm
+  registry: https://www.npmjs.com/package/@zeroclickai/sellers
+  official: true
+  version: 0.2.0
+  license: Apache-2.0
+  description: Web-native seller SDK for ZeroClick request verification, allowance checks, usage reporting, and encryption.
+  homepage: https://github.com/piedotorg/zeroclick#readme
+  repository: https://github.com/piedotorg/zeroclick
+  install: npm install @zeroclickai/sellers
+  language: TypeScript
+  exports:
+  - createSeller
+  - guard
+  - guardIdentity
+  - withUsage
+  - reportUsage
+  - isZCError
+  notes: >-
+    First-party seller-side SDK. Verifies ZeroClick request signatures, checks
+    buyer allowance, reports billable usage, and surfaces typed ZCError errors.
+    Web-native (accepts standard Request objects); Express/Fastify adapt at the
+    framework boundary.

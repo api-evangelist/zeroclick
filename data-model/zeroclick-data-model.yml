@@ -1,0 +1,65 @@
+generated: '2026-07-21'
+method: derived
+source: https://zeroclick.ai/docs ("How the pieces fit together")
+notes: >-
+  Entity-relationship graph derived from the ZeroClick seller integration guide.
+  No formal OpenAPI is published, so relationships are read from the documented
+  object model rather than $ref links.
+entities:
+- name: Seller
+  description: Your company or product in ZeroClick. Gets a hosted pay URL like https://<seller>.pay.zeroclick.io.
+  attributes: [upstream_url, pay_url, custom_domains, signing_secret (zcsec_...), api_keys]
+- name: Service
+  description: One thing agents buy or use (an LLM model, a data API, a workflow, a platform feature). Usage is reported against a service.
+  attributes: [serviceSlug]
+  examples: [gpt-oss-120b, image-search, product-watch]
+- name: Meter
+  description: A billable measurement inside a service.
+  attributes: [meterSlug, max_usage_per_request_default]
+  examples: [requests, output_tokens, product_watch_hours, search_results]
+- name: Plan
+  description: How agents pay — pay-as-you-go, credit-based, subscription, or subscription with usage. Belongs to the seller.
+  attributes: [planSlug, type]
+- name: Price
+  description: Price attached to a meter within a plan.
+  attributes: [meterSlug, amount]
+- name: SigningSecret
+  description: Per-seller HMAC secret (zcsec_...) used to sign proxied requests; supports rotation via kid.
+- name: ApiKey
+  description: Scoped key for the ZeroClick API (admin:*/usage:* scopes).
+- name: Agent
+  description: The buying AI agent, identified by zc-agent-id (agt_...) once identity is proven.
+relationships:
+- from: Seller
+  to: Service
+  type: has_many
+- from: Seller
+  to: Plan
+  type: has_many
+- from: Seller
+  to: SigningSecret
+  type: has_many
+- from: Seller
+  to: ApiKey
+  type: has_many
+- from: Service
+  to: Meter
+  type: has_many
+- from: Plan
+  to: Price
+  type: has_many
+- from: Price
+  to: Meter
+  type: belongs_to
+  via: meterSlug
+- from: Meter
+  to: Service
+  type: belongs_to
+  via: serviceSlug
+id_prefixes:
+- prefix: zcreq_
+  entity: request id (zc-request-id)
+- prefix: agt_
+  entity: agent id (zc-agent-id)
+- prefix: zcsec_
+  entity: signing secret / kid

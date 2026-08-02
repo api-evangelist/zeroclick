@@ -1,0 +1,48 @@
+generated: '2026-07-21'
+method: searched
+source: https://zeroclick.ai/docs (Seller Integration Guide)
+summary: >-
+  ZeroClick sellers authenticate to the ZeroClick API with a scoped API key, and
+  verify inbound proxied agent traffic with an HMAC request signature. There is
+  no OAuth2 flow documented for the seller integration.
+schemes:
+- id: api_key
+  type: apiKey
+  in: header
+  description: >-
+    Scoped API key created in the ZeroClick dashboard and supplied to the seller
+    SDK (ZEROCLICK_API_KEY). Used for allowance checks and usage reporting.
+  scopes:
+  - name: admin:read
+    grants: Read sellers, services, meters, plans, prices, custom domains, signing-secret metadata, and analytics.
+  - name: admin:write
+    grants: Create, update, and delete configuration, including creating and revoking signing secrets. Does not imply admin:read.
+  - name: usage:read
+    grants: Check whether requested usage is allowed.
+  - name: usage:write
+    grants: Report billable usage.
+  scope_notes: >-
+    Use admin:* keys for tooling that manages configuration; use a separate key
+    with both usage:read and usage:write for the server integration. Legacy
+    billing:* and secrets:* scopes were migrated to the equivalent admin:*
+    scopes with the same access.
+- id: request_signature
+  type: http
+  scheme: hmac
+  in: header
+  description: >-
+    ZeroClick signs every proxied request to the seller's upstream so only
+    ZeroClick-signed traffic can reach billable endpoints. Sellers verify the
+    signature over the exact request bytes before doing billable work.
+  headers:
+  - name: zc-signature
+    format: t=<unix-ts>,kid=zcsec_...,v1=<hex-hmac>
+  - name: zc-request-id
+    format: zcreq_...
+  - name: zc-agent-id
+    format: agt_...  (omitted on an anonymous identity probe)
+  signing_secret: >-
+    Per-seller signing secret (zcsec_...) created in the dashboard, shown once.
+    Supports key rotation via kid so in-flight requests signed with either the
+    current or previous secret continue to verify.
+  tolerance: Default five-minute signature timestamp tolerance.

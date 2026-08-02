@@ -1,0 +1,44 @@
+# ZeroClick
+
+> ZeroClick is the agent-first storefront and transaction layer that turns any API or offering into an agent-purchasable service, with x402 and MPP (Machine Payments Protocol) payment rails, a machine-readable storefront, agent identity, and per-transaction analytics. Sellers keep their existing upstream API and Stripe account; ZeroClick operates the agent-facing payment, identity, and proxy layer in front of it. Launched July 2026 by the People's Internet Experiment; raised $55M.
+
+Method: generated (from apis.yml + repo artifacts; no provider-published llms.txt found at https://zeroclick.ai/llms.txt — HTTP 404).
+
+## How it works
+- Agents call a hosted per-seller pay URL (e.g. https://acme.pay.zeroclick.io/v1/...) using MPP or x402.
+- ZeroClick handles wallet identity, payment challenges, and signed proxying to the seller's upstream API.
+- The seller's API verifies the ZeroClick HMAC signature, checks allowance, and returns the result.
+- Payment settles to the seller's connected Stripe account while ZeroClick records usage.
+
+## Core objects
+- Seller: your company/product; gets a pay URL and signing secret.
+- Service: one thing agents buy (LLM model, data API, workflow, feature).
+- Meter: a billable measurement in a service (requests, output_tokens, etc.).
+- Plan: how agents pay (pay-as-you-go, credit, subscription, subscription+usage).
+- Price: amount attached to a meter within a plan.
+
+## Docs
+- Seller Integration Guide: https://zeroclick.ai/docs
+- Launch post — It's time to sell to AI agents: https://zeroclick.ai/its-time-to-sell-to-agents
+
+## SDK
+- @zeroclickai/sellers (npm, Apache-2.0): https://www.npmjs.com/package/@zeroclickai/sellers
+- Source: https://github.com/piedotorg/zeroclick
+- Exports: createSeller, guard, guardIdentity, withUsage, reportUsage, isZCError
+
+## Auth
+- Scoped API key (admin:read, admin:write, usage:read, usage:write).
+- HMAC request signature (zc-signature: t/kid/v1) verified over exact request bytes; five-minute tolerance; kid rotation.
+
+## Repo artifacts
+- packages/zeroclick-packages.yml — first-party SDK
+- authentication/zeroclick-authentication.yml — API-key scopes + HMAC signing
+- conventions/zeroclick-conventions.yml — idempotency, request-id, error envelope, versioning
+- errors/zeroclick-problem-types.yml — payment_required, capped_pricing_unavailable, access_not_found, ...
+- conformance/zeroclick-conformance.yml — x402, MPP, Stripe Connect, HMAC, idempotency
+- data-model/zeroclick-data-model.yml — Seller/Service/Meter/Plan/Price graph
+- lifecycle/zeroclick-lifecycle.yml — v1 API, SDK semver, scope migration
+
+## Legal
+- Terms of Service: https://zeroclick.ai/terms-of-service
+- Privacy Policy: https://zeroclick.ai/privacy-policy

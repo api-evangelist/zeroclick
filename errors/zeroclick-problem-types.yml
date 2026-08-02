@@ -1,0 +1,33 @@
+generated: '2026-07-21'
+method: searched
+source: https://zeroclick.ai/docs (Seller Integration Guide)
+format: custom-json
+envelope_field: error
+notes: >-
+  ZeroClick does not use RFC 9457 problem+json. Guard/allowance outcomes are
+  returned as decisions carrying a status code and a small JSON body keyed on
+  `error`; SDK-level failures throw typed ZCError instances (narrow with
+  isZCError). Derived from the published seller integration guide.
+problem_types:
+- code: payment_required
+  status: 402
+  meaning: Valid request but insufficient allowance for the requested usage; buyer must pay.
+  remediation: Return the exact seller 402 body with serviceSlug, optional planSlug, and usage[]; ZeroClick answers the payment challenge.
+- code: invalid_signature
+  status: 401
+  meaning: zc-signature missing, stale (outside the five-minute tolerance), or invalid. Allowance API is not called.
+  remediation: Reject; return the SDK-provided 401 decision. Never fail open on a signature error.
+- code: access_not_found
+  meaning: reportUsage against a buyer with no active access (identity alone is not billable).
+  remediation: Ensure the buyer has an active plan/allowance before reporting usage.
+- code: capped_pricing_unavailable
+  status: 503
+  meaning: A capped (maxQuantity) request was made but no reserve rail (x402 upto / MPP escrow) is enabled for the service. Fixed-price requests are unaffected.
+  remediation: Enable at least one reserve rail, or require a prepaid balance, before offering capped pricing.
+- code: allowance_unavailable
+  status: 503
+  meaning: Allowance infrastructure failure after the signature verified (allowance check timed out).
+  remediation: Governed by allowanceUnavailable policy on createSeller — allow (default), deny (503), or throw.
+- code: api_status_error
+  meaning: ZeroClick API returned an unsuccessful status for an SDK operation (e.g. a rejected usage report).
+  remediation: Narrow with isZCError(error, 'api_status_error'); inspect error.context.status and error.context.reason.

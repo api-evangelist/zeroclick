@@ -1,0 +1,39 @@
+generated: '2026-07-21'
+method: searched
+source: https://zeroclick.ai/docs + https://zeroclick.ai/its-time-to-sell-to-agents
+notes: >-
+  Cross-cutting standards and protocols ZeroClick asserts support for. These are
+  interoperability protocol claims from the seller integration guide and launch
+  post, not third-party audited compliance certifications (no SOC 2 / ISO 27001
+  program is published).
+conformance:
+- id: x402
+  name: x402 agent payment protocol
+  conforms: true
+  evidence: >-
+    ZeroClick operates x402 pay endpoints agents call and pay through, including
+    the x402 "upto" reserve-and-settle-actual scheme. x402 was authored by
+    Coinbase and is now governed by the Linux Foundation (x402 Foundation).
+- id: mpp
+  name: MPP (Machine Payments Protocol)
+  conforms: true
+  evidence: >-
+    ZeroClick manages MPP endpoints agents call, including MPP escrow sessions
+    for reserve-and-pay-actual settlement. MPP was released by Stripe and Tempo.
+- id: stripe-connect
+  name: Stripe Connect settlement
+  conforms: true
+  evidence: >-
+    Payments settle to the seller's connected Stripe account; ZeroClick creates
+    payment requests and routes settlement without the seller collecting cards.
+- id: hmac-request-signing
+  name: HMAC request signature verification
+  conforms: true
+  evidence: >-
+    Proxied requests carry a t/kid/v1 HMAC signature (zc-signature) verified
+    over exact request bytes with a five-minute timestamp tolerance and kid
+    rotation.
+- id: idempotency
+  name: Idempotent usage reporting
+  conforms: true
+  evidence: reportUsage accepts a caller-supplied idempotencyKey so retries do not double-record usage.

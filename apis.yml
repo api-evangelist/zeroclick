@@ -1,8 +1,30 @@
 aid: zeroclick
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/zeroclick.png
 name: Zeroclick
-description: 'Zeroclick is a company surfaced as a portfolio company of forerunner-ventures and added
-  to the API Evangelist network as a stub for enrichment. Sector: ai. This profile is a lead awaiting
-  the enrichment pipeline.'
+description: >-
+  ZeroClick is the agent-first storefront and transaction layer that lets
+  businesses sell directly to AI agents. It turns any existing API or offering
+  into an agent-purchasable service, publishing a machine-readable storefront so
+  agents can discover it and adding agent identity, agent-native payment rails
+  (x402 and MPP, the Machine Payments Protocol), signed proxying, and
+  per-transaction analytics in front of the seller's unchanged upstream API.
+  Sellers keep their product, pricing, and customer experience, add a small
+  guard to billed endpoints via the @zeroclickai/sellers SDK, and settle revenue
+  to their own connected Stripe account. ZeroClick launched in July 2026, raised
+  $55M, is backed by Forerunner Ventures, and is a product of the People's
+  Internet Experiment.
 url: https://raw.githubusercontent.com/api-evangelist/zeroclick/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -12,10 +34,17 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
 - Ai
+- Agent Commerce
+- Agentic Payments
+- API Monetization
+- x402
+- Machine Payments Protocol
+- Agent Identity
+- Stripe
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -25,3 +54,44 @@ maintainers:
 common:
 - type: Website
   url: https://zeroclick.ai
+- type: Documentation
+  url: https://zeroclick.ai/docs
+- type: APIReference
+  url: https://zeroclick.ai/docs
+- type: TermsOfService
+  url: https://zeroclick.ai/terms-of-service
+- type: PrivacyPolicy
+  url: https://zeroclick.ai/privacy-policy
+- type: GitHubOrganization
+  url: https://github.com/piedotorg
+- type: SourceCode
+  url: https://github.com/piedotorg/zeroclick
+- type: Packages
+  url: packages/zeroclick-packages.yml
+- type: SDKs
+  url: packages/zeroclick-packages.yml
+- type: Authentication
+  url: authentication/zeroclick-authentication.yml
+- type: Conventions
+  url: conventions/zeroclick-conventions.yml
+- type: Idempotency
+  url: conventions/zeroclick-conventions.yml
+- type: ErrorCatalog
+  url: errors/zeroclick-problem-types.yml
+- type: Conformance
+  url: conformance/zeroclick-conformance.yml
+- type: DataModel
+  url: data-model/zeroclick-data-model.yml
+- type: Lifecycle
+  url: lifecycle/zeroclick-lifecycle.yml
+- type: DomainSecurity
+  url: security/zeroclick-domain-security.yml
+- type: WellKnown
+  url: well-known/zeroclick-well-known.yml
+- type: LLMsTxt
+  url: llms/zeroclick-llms.txt
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 10
+  pass: local-v1

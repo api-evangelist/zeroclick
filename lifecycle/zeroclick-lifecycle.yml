@@ -1,0 +1,23 @@
+generated: '2026-07-21'
+method: derived
+source: https://zeroclick.ai/docs + npm registry (@zeroclickai/sellers)
+notes: >-
+  Early-stage lifecycle signals derived from the seller integration guide and
+  the published SDK. ZeroClick launched July 2026; no public status page,
+  formal SLA, or dated deprecation policy is published at this time.
+api_versioning:
+  style: path
+  current: v1
+  example: https://<seller>.pay.zeroclick.io/v1/<operation>
+sdk_versioning:
+  package: '@zeroclickai/sellers'
+  current: 0.2.0
+  scheme: semver
+  released_versions: [0.1.0, 0.2.0]
+scope_migrations:
+- from: [billing:*, secrets:*]
+  to: [admin:read, admin:write]
+  note: Legacy billing:* and secrets:* API-key scopes were migrated to the equivalent admin:* scopes with the same access.
+status_page: none-found
+sla: none-published
+deprecation_policy: none-published

@@ -1,0 +1,57 @@
+generated: '2026-07-21'
+method: searched
+source: https://zeroclick.ai/docs (Seller Integration Guide)
+summary: >-
+  Cross-cutting runtime semantics for the ZeroClick agent-commerce integration:
+  API-key + HMAC auth, idempotent usage reporting, request-id tracing, a
+  fixed error envelope, and versioned pay endpoints.
+auth:
+  style: Scoped API key (usage:*/admin:*) for the ZeroClick API; HMAC request signature (zc-signature) on proxied agent traffic.
+  see: authentication/zeroclick-authentication.yml
+idempotency:
+  supported: true
+  mechanism: >-
+    reportUsage accepts a caller-supplied idempotencyKey so retries do not
+    double-record billable usage. The SDK does not invent idempotency keys or
+    auto-retry billable work; the seller supplies a stable key (e.g.
+    job_<id>_final_tokens) and persists the verified zcAgentId with the job.
+  field: idempotencyKey
+  scope: per usage report
+request_tracing:
+  header: zc-request-id
+  format: zcreq_...
+  notes: ZeroClick attaches a request id to every proxied request for correlation.
+agent_identity:
+  header: zc-agent-id
+  format: agt_...
+  notes: >-
+    Present once the buyer proves identity; null/absent on an anonymous probe.
+    Do not reject a request only because zc-agent-id is absent — guardIdentity
+    answers a missing identity with a free 402 identity challenge and retries.
+versioning:
+  style: path
+  example: https://<seller>.pay.zeroclick.io/v1/<operation>
+error_envelope:
+  style: custom-json
+  payment_required:
+    fields: [error, serviceSlug, planSlug, usage]
+    example:
+      error: payment_required
+      serviceSlug: product-watch
+      planSlug: growth
+      usage:
+      - meterSlug: product_watch_hours
+        quantity: 2
+  sdk_errors: ZCError with isZCError() type guard; error context is sanitized (no signing secrets, API keys, or request bytes).
+  see: errors/zeroclick-problem-types.yml
+usage_metering:
+  model: >-
+    Usage is reported against a service and one or more meters. Items declare a
+    fixed quantity, or a maxQuantity ceiling for open-ended work (LLM output
+    tokens, processing seconds) reserved up front and settled at actual.
+  positive_integers_only: true
+  no_duplicate_meter_per_check: true
+fail_open_policy:
+  setting: allowanceUnavailable (createSeller)
+  values: [allow (default), deny (503), throw]
+  rule: Never apply the fail-open policy to a missing or invalid signature — only to allowance-infrastructure failures after the signature verifies.

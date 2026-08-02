@@ -1,0 +1,44 @@
+generated: '2026-07-21'
+method: probed
+source: live HTTP probes of https://zeroclick.ai (canonical host www.zeroclick.ai)
+notes: >-
+  zeroclick.ai is a client-rendered SPA served behind a catch-all: every unknown
+  path returns HTTP 200 with the index HTML (content-type text/html), so a 200 on
+  a .well-known JSON path is an SPA fallback, not a real document. No genuine
+  well-known metadata documents are published. robots.txt is real (text/plain).
+probes:
+- path: /.well-known/security.txt
+  status: 404
+  real: false
+  file: null
+- path: /.well-known/openid-configuration
+  status: 200
+  real: false
+  reason: SPA fallback (text/html, not application/json)
+  file: null
+- path: /.well-known/oauth-authorization-server
+  status: 200
+  real: false
+  reason: SPA fallback (text/html)
+  file: null
+- path: /.well-known/api-catalog
+  status: 200
+  real: false
+  reason: SPA fallback (text/html)
+  file: null
+- path: /.well-known/ai-plugin.json
+  status: 200
+  real: false
+  reason: SPA fallback (text/html)
+  file: null
+- path: /openapi.json
+  status: 200
+  real: false
+  reason: SPA fallback (text/html)
+  file: null
+- path: /robots.txt
+  status: 200
+  real: true
+  content_type: text/plain
+  points_to: https://zeroclick.ai/sitemap.xml
+  file: null
